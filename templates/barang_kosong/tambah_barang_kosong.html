@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card p-4">
+            <h3 class="h5 mb-3 fw-bold">Tambah Daftar Barang Kosong</h3>
+            <form method="POST">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+                <div class="mb-3">
+                    <label class="form-label">Nama Barang</label>
+                    <input type="text" name="nama_barang" class="form-control" required placeholder="Masukkan nama barang yang habis">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Status Barang</label>
+                    <select name="status_barang" class="form-select">
+                        <option value="Habis">Habis Total</option>
+                        <option value="Hampir Habis">Hampir Habis (Sisa Sedikit)</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">Tanggal Input</label>
+                    <input type="date" name="tanggal_input" class="form-control" required>
+                </div>
+                <div class="d-flex justify-content-end gap-2">
+                    <a href="/barang-kosong" class="btn btn-light btn-sm">Batal</a>
+                    <button type="submit" class="btn btn-primary btn-sm">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

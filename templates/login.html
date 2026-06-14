@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}Login - Nia Jaya{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="col-md-5 col-lg-4">
+        <div class="login-box">
+            <div class="text-center mb-4">
+                <h2 class="login-title text-primary"><i class="bi bi-printer"></i> Nia Jaya</h2>
+                <p class="login-subtitle">Sistem Manajemen Fotocopy</p>
+            </div>
+            
+            <form action="/login" method="POST" id="loginForm">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+                <div class="mb-3">
+                    <label class="form-label">Username</label>
+                    <input type="text" name="username" class="form-control" id="usernameInput" required placeholder="Masukkan username" value="{{ username|default('') }}" autocomplete="username">
+                </div>
+                <div class="mb-2">
+                    <label class="form-label">Password</label>
+                    <div class="input-group">
+                        <input type="password" name="password" class="form-control" id="passwordInput" required placeholder="Masukkan password" autocomplete="current-password">
+                        <button class="btn btn-outline-secondary" type="button" id="togglePassword" style="cursor: pointer; z-index: 10;">
+                            <i class="bi bi-eye" id="toggleIcon"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="text-end mb-4">
+                    <a href="/forgot-password" class="text-decoration-none small">Lupa password?</a>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" value="on" id="rememberMe" name="remember_me">
+                    <label class="form-check-label" for="rememberMe">
+                        Ingat Saya
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-primary w-100" id="loginBtn">
+                    <span id="loginBtnText">Login Sistem</span>
+                    <span id="loginBtnSpinner" class="spinner-border spinner-border-sm ms-2" style="display: none;" role="status" aria-hidden="true"></span>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/login.js') }}"></script>
+{% endblock %}

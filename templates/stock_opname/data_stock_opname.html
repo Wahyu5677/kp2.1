@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h2 class="h4 mb-1"><i class="bi bi-clipboard-check text-warning"></i> Rekap Stock Opname</h2>
+        <p class="text-muted mb-0">Laporan pemeriksaan stok fisik untuk standar kerja praktik.</p>
+    </div>
+    <div class="btn-group">
+        <a href="/stock-opname/tambah" class="btn btn-warning btn-sm"><i class="bi bi-plus-lg"></i> Tambah Opname</a>
+        <a href="/stock-opname/export?format=xlsx" class="btn btn-outline-success btn-sm"><i class="bi bi-file-earmark-spreadsheet"></i> Excel</a>
+        <a href="/stock-opname/export?format=csv" class="btn btn-outline-secondary btn-sm"><i class="bi bi-file-earmark-text"></i> CSV</a>
+    </div>
+</div>
+
+<div class="row g-3 mb-3">
+    <div class="col-md-3">
+        <div class="card card-box p-3">
+            <div class="text-uppercase text-muted small">Total Rekap</div>
+            <div class="h4">{{ total_opname }}</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card card-box p-3">
+            <div class="text-uppercase text-muted small">Selisih Positif</div>
+            <div class="h4 text-success">{{ positive_opname }}</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card card-box p-3">
+            <div class="text-uppercase text-muted small">Selisih Negatif</div>
+            <div class="h4 text-danger">{{ negative_opname }}</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card card-box p-3">
+            <div class="text-uppercase text-muted small">Total Selisih</div>
+            <div class="h4">{{ total_selisih }}</div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <div class="row g-2 align-items-center">
+            <div class="col-md-6">
+                <label class="form-label mb-1" for="searchStockOpname">Cari Opname</label>
+                <input id="searchStockOpname" type="text" class="form-control" placeholder="Cari nama barang, tanggal, atau petugas...">
+            </div>
+            <div class="col-md-6 text-md-end">
+                <span class="badge bg-warning" id="rowCountStockOpname">0 data</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0" id="tableStockOpname">
+            <thead class="table-light">
+                <tr>
+                    <th>No.</th>
+                    <th>Nama Barang</th>
+                    <th>Stok Sistem</th>
+                    <th>Stok Fisik</th>
+                    <th>Selisih</th>
+                    <th>Tanggal</th>
+                    <th>Petugas</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for d in data %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td class="fw-semibold">{{ d.nama_barang }}</td>
+                    <td>{{ d.stok_sistem }}</td>
+                    <td>{{ d.stok_fisik }}</td>
+                    <td>
+                        {% if d.selisih < 0 %}
+                        <span class="text-danger fw-bold">{{ d.selisih }}</span>
+                        {% elif d.selisih > 0 %}
+                        <span class="text-success fw-bold">+{{ d.selisih }}</span>
+                        {% else %}
+                        <span class="text-muted">{{ d.selisih }}</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ d.tanggal_opname }}</td>
+                    <td>{{ d.petugas }}</td>
+                    <td class="text-nowrap">
+                        <button type="button" class="btn btn-sm btn-danger py-0 px-2 btn-hapus" data-bs-toggle="modal" data-bs-target="#modalHapusStockOpname" data-hapus-url="/stock-opname/hapus/{{ d.id_opname }}" data-hapus-label="{{ d.nama_barang }}">
+                            <i class="bi bi-trash"></i> Hapus
+                        </button>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="8" class="text-center text-muted py-4">Belum ada aktivitas pemeriksaan fisik stock (opname).</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal fade" id="modalHapusStockOpname" tabindex="-1" aria-labelledby="modalHapusStockOpnameLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalHapusStockOpnameLabel"><i class="bi bi-exclamation-triangle-fill text-danger"></i> Konfirmasi Hapus</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-danger mb-0">
+            Anda yakin ingin menghapus laporan opname <strong id="modalHapusStockOpnameLabelItem">data ini</strong>?
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Batal</button>
+        <form id="formHapusStockOpname" method="POST">
+          <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+          <button type="submit" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i> Hapus</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

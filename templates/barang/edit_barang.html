@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card p-4">
+            <h3 class="h5 mb-3 fw-bold">Edit Data Barang</h3>
+            <form method="POST">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+                <div class="mb-3">
+                    <label class="form-label">Nama Barang</label>
+                    <!-- Menggunakan format dictionary barang.nama_barang -->
+                    <input type="text" name="nama_barang" class="form-control" value="{{ barang.nama_barang }}" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Kategori</label>
+                    <input type="text" name="kategori" class="form-control" value="{{ barang.kategori }}" required>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">Stok</label>
+                    <input type="number" name="stok" class="form-control" value="{{ barang.stok }}" required>
+                </div>
+                <div class="d-flex justify-content-end gap-2">
+                    <a href="/barang" class="btn btn-light btn-sm">Batal</a>
+                    <button type="submit" class="btn btn-success btn-sm">Update Data</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

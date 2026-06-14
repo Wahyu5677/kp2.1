@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="h4 mb-0"><i class="bi bi-exclamation-triangle text-danger"></i> Log Barang Kosong / Habis</h2>
+    <a href="/barang-kosong/tambah" class="btn btn-danger btn-sm"><i class="bi bi-plus-lg"></i> Tambah Laporan</a>
+</div>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <div class="row g-2 align-items-center">
+            <div class="col-md-6">
+                <label class="form-label mb-1" for="searchBarangKosong">Cari</label>
+                <input id="searchBarangKosong" type="text" class="form-control" placeholder="Cari nama, status, tanggal...">
+            </div>
+            <div class="col-md-6 text-md-end">
+                <span class="badge text-bg-primary" id="rowCountBarangKosong">0 data</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0" id="tableBarangKosong">
+            <thead class="table-light">
+                <tr>
+                    <th>No.</th>
+                    <th>Nama Barang</th>
+                    <th>Status</th>
+                    <th>Tanggal</th>
+                    <th>Input Oleh</th>
+                    <th class="text-center">Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for b in barang %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td class="fw-semibold">{{ b.nama_barang }}</td>
+                    <td>
+                        {% if b.status_barang == 'Habis' %}
+                        <span class="badge bg-danger">Habis</span>
+                        {% else %}
+                        <span class="badge bg-warning text-dark">Hampir Habis</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ b.tanggal_input }}</td>
+                    <td>{{ b.input_oleh }}</td>
+                    <td class="text-center">
+                        <a href="/barang-kosong/edit/{{ b.id_kosong }}" class="btn btn-sm btn-warning py-0 px-2">Edit</a>
+
+                        {% if session['role'] == 'owner' %}
+                        <button
+                            type="button"
+                            class="btn btn-sm btn-danger py-0 px-2 ms-1 btn-hapus"
+                            data-bs-toggle="modal"
+                            data-bs-target="#modalHapusBarangKosong"
+                            data-hapus-url="/barang-kosong/hapus/{{ b.id_kosong }}"
+                            data-hapus-label="{{ b.nama_barang }}"
+                        >
+                            <i class="bi bi-trash"></i> Hapus
+                        </button>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6" class="text-center py-3">
+                        <div class="alert alert-secondary mb-0">
+                            Semua stok aman, tidak ada barang kosong saat ini.
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal Konfirmasi Hapus (Barang Kosong) -->
+<div class="modal fade" id="modalHapusBarangKosong" tabindex="-1" aria-labelledby="modalHapusBarangKosongLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalHapusBarangKosongLabel"><i class="bi bi-exclamation-triangle-fill text-danger"></i> Konfirmasi Hapus</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-danger mb-0" id="modalHapusBarangKosongBody">
+            Anda yakin ingin menghapus <strong id="modalHapusBarangKosongLabelItem">data ini</strong>?
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Batal</button>
+
+        <form id="formHapusBarangKosong" method="POST">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+            <button type="submit" class="btn btn-danger btn-sm">
+                <i class="bi bi-trash"></i> Hapus
+            </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}{% endblock %}

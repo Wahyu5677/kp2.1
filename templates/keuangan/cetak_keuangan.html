@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block title %}Cetak Laporan Keuangan - Nia Jaya{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12 text-center">
+        <h2 class="h4 mb-1">Laporan Keuangan</h2>
+        <p class="text-muted mb-0">{{ now.strftime('%d %B %Y %H:%M') if now else '' }}</p>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="card card-box p-3">
+            <div class="text-uppercase text-muted small">Total Pemasukan</div>
+            <div class="h4">Rp {{ total_pemasukan|rupiah }}</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card card-box p-3">
+            <div class="text-uppercase text-muted small">Total Pengeluaran</div>
+            <div class="h4">Rp {{ total_pengeluaran|rupiah }}</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card card-box p-3">
+            <div class="text-uppercase text-muted small">Saldo Bersih</div>
+            <div class="h4 {% if saldo < 0 %}text-danger{% else %}text-success{% endif %}">Rp {{ saldo|rupiah }}</div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="table-responsive">
+        <table class="table table-bordered table-sm align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th style="width: 5%;">No.</th>
+                    <th style="width: 15%;">Tanggal</th>
+                    <th style="width: 20%;">Pemasukan</th>
+                    <th style="width: 20%;">Pengeluaran</th>
+                    <th>Keterangan</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for k in data %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ k.tanggal }}</td>
+                    <td class="text-success">{% if k.pemasukan > 0 %}Rp {{ k.pemasukan|rupiah }}{% else %}-{% endif %}</td>
+                    <td class="text-danger">{% if k.pengeluaran > 0 %}Rp {{ k.pengeluaran|rupiah }}{% else %}-{% endif %}</td>
+                    <td>{{ k.keterangan }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5" class="text-center text-muted py-4">Tidak ada data keuangan untuk dicetak.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        window.print();
+    });
+</script>
+{% endblock %}

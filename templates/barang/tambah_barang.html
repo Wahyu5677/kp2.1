@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block title %}Tambah Barang - Nia Jaya{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Tambah Data Barang Baru</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Kode Barang</label>
+                            <input type="text" name="kode_barang" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Nama Barang</label>
+                            <input type="text" name="nama_barang" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Kategori</label>
+                            <select name="kategori" class="form-select">
+                                <option value="ATK">ATK</option>
+                                <option value="Kertas">Kertas</option>
+                                <option value="Aksesoris">Aksesoris</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Stok Awal</label>
+                            <input type="number" name="stok" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label">Harga (Rp)</label>
+                            <input type="number" name="harga" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Satuan</label>
+                            <select name="satuan" class="form-select">
+                                <option value="Pcs">Pcs</option>
+                                <option value="Rim">Rim</option>
+                                <option value="Pack">Pack</option>
+                                <option value="Lembar">Lembar</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="text-end">
+                        <a href="/barang" class="btn btn-secondary">Batal</a>
+                        <button type="submit" class="btn btn-success"><i class="bi bi-save"></i> Simpan Barang</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

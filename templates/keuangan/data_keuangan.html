@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h2 class="h4 mb-1"><i class="bi bi-wallet2 text-success"></i> Buku Kas & Keuangan</h2>
+        <p class="text-muted mb-0">Ringkasan arus kas untuk laporan kerja praktik.</p>
+    </div>
+    <div class="btn-group">
+        <a href="/keuangan/tambah" class="btn btn-success btn-sm"><i class="bi bi-plus-lg"></i> Catat Transaksi</a>
+        <a href="/keuangan/export?format=xlsx&periode={{ periode or 'all' }}&periode_value={{ periode_value or '' }}" class="btn btn-outline-success btn-sm"><i class="bi bi-file-earmark-spreadsheet"></i> Excel</a>
+        <a href="/keuangan/export?format=pdf&periode={{ periode or 'all' }}&periode_value={{ periode_value or '' }}" target="_blank" class="btn btn-outline-primary btn-sm"><i class="bi bi-file-earmark-pdf"></i> PDF</a>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="card card-box p-3">
+            <div class="text-uppercase text-muted small">Total Pemasukan</div>
+            <div class="h4">Rp {{ total_pemasukan|rupiah }}</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card card-box p-3">
+            <div class="text-uppercase text-muted small">Total Pengeluaran</div>
+            <div class="h4">Rp {{ total_pengeluaran|rupiah }}</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card card-box p-3">
+            <div class="text-uppercase text-muted small">Saldo Bersih</div>
+            <div class="h4 {% if saldo < 0 %}text-danger{% else %}text-success{% endif %}">
+                Rp {{ saldo|rupiah }}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <form class="row g-2 align-items-end" method="get" action="/keuangan">
+            <div class="col-md-3">
+                <label class="form-label mb-1" for="periode">Periode Laporan</label>
+                <select id="periode" name="periode" class="form-select form-select-sm">
+                    <option value="all" {% if periode == 'all' %}selected{% endif %}>Semua</option>
+                    <option value="weekly" {% if periode == 'weekly' %}selected{% endif %}>Mingguan</option>
+                    <option value="monthly" {% if periode == 'monthly' %}selected{% endif %}>Bulanan</option>
+                </select>
+            </div>
+            <div class="col-md-3 weekly-field {% if periode != 'weekly' %}d-none{% endif %}" id="weeklyField">
+                <label class="form-label mb-1" for="periodeWeekly">Pekan Pilihan</label>
+                <input id="periodeWeekly" name="periode_value" type="date" class="form-control form-control-sm" value="{{ periode_value if periode == 'weekly' else '' }}">
+            </div>
+            <div class="col-md-3 monthly-field {% if periode != 'monthly' %}d-none{% endif %}" id="monthlyField">
+                <label class="form-label mb-1" for="periodeMonthly">Bulan Pilihan</label>
+                <input id="periodeMonthly" name="periode_value" type="month" class="form-control form-control-sm" value="{{ periode_value if periode == 'monthly' else '' }}">
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary btn-sm w-100">Terapkan</button>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <div class="small text-muted">Filter saat ini: <strong>{{ period_label }}</strong></div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <div class="row g-2 align-items-center">
+            <div class="col-md-6">
+                <label class="form-label mb-1" for="searchKeuangan">Cari Transaksi</label>
+                <input id="searchKeuangan" type="text" class="form-control" placeholder="Cari tanggal, keterangan, atau jumlah...">
+            </div>
+            <div class="col-md-6 text-md-end">
+                <span class="badge bg-primary" id="rowCountKeuangan">0 data</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0" id="tableKeuangan">
+            <thead class="table-light">
+                <tr>
+                    <th>No.</th>
+                    <th>Tanggal</th>
+                    <th>Pemasukan</th>
+                    <th>Pengeluaran</th>
+                    <th>Keterangan</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for k in data %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ k.tanggal }}</td>
+                    <td class="text-success">{% if k.pemasukan > 0 %}Rp {{ k.pemasukan|rupiah }}{% else %}-{% endif %}</td>
+                    <td class="text-danger">{% if k.pengeluaran > 0 %}Rp {{ k.pengeluaran|rupiah }}{% else %}-{% endif %}</td>
+                    <td class="small text-muted">{{ k.keterangan }}</td>
+                    <td class="text-nowrap">
+                        <a href="/keuangan/edit/{{ k.id_keuangan }}" class="btn btn-sm btn-warning py-0 px-2"><i class="bi bi-pencil"></i> Edit</a>
+                        <button type="button" class="btn btn-sm btn-danger py-0 px-2 ms-1 btn-hapus" data-bs-toggle="modal" data-bs-target="#modalHapusKeuangan" data-hapus-url="/keuangan/hapus/{{ k.id_keuangan }}" data-hapus-label="{{ k.keterangan or 'transaksi kas' }}">
+                            <i class="bi bi-trash"></i> Hapus
+                        </button>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6" class="text-center text-muted py-4">Belum pembukuan kas yang tercatat bulan ini.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal fade" id="modalHapusKeuangan" tabindex="-1" aria-labelledby="modalHapusKeuanganLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalHapusKeuanganLabel"><i class="bi bi-exclamation-triangle-fill text-danger"></i> Konfirmasi Hapus</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-danger mb-0">
+            Anda yakin ingin menghapus <strong id="modalHapusKeuanganLabelItem">data ini</strong>?
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Batal</button>
+        <form id="formHapusKeuangan" method="POST">
+          <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+          <button type="submit" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i> Hapus</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="p-4 bg-white rounded shadow-sm mb-4">
+    <h1 class="h3 mb-2">Dashboard Owner</h1>
+    <p class="text-muted">Selamat datang kembali, Anda memiliki akses penuh ke seluruh modul administrasi fotocopy.</p>
+</div>
+
+<div class="row g-3">
+    <div class="col-md-3">
+        <div class="card card-dashboard text-center p-4">
+            <i class="bi bi-box-seam text-primary fs-1 mb-3"></i>
+            <h5 class="mb-2">Data Barang</h5>
+            <p class="text-muted small">Kelola persediaan produk dengan cepat.</p>
+            <a href="/barang" class="btn btn-primary btn-sm mt-2">Buka Modul</a>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card card-dashboard text-center p-4">
+            <i class="bi bi-exclamation-circle text-danger fs-1 mb-3"></i>
+            <h5 class="mb-2">Barang Kosong</h5>
+            <p class="text-muted small">Laporkan stok habis atau hampir habis.</p>
+            <a href="/barang-kosong" class="btn btn-danger btn-sm mt-2">Buka Modul</a>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card card-dashboard text-center p-4">
+            <i class="bi bi-wallet2 text-success fs-1 mb-3"></i>
+            <h5 class="mb-2">Data Keuangan</h5>
+            <p class="text-muted small">Catat pemasukan dan pengeluaran.</p>
+            <a href="/keuangan" class="btn btn-success btn-sm mt-2">Buka Modul</a>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card card-dashboard text-center p-4">
+            <i class="bi bi-clipboard-check text-warning fs-1 mb-3"></i>
+            <h5 class="mb-2">Stock Opname</h5>
+            <p class="text-muted small">Lakukan pengecekan stok secara rutin.</p>
+            <a href="/stock-opname" class="btn btn-warning btn-sm mt-2">Buka Modul</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
