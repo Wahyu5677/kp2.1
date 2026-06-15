@@ -7,11 +7,11 @@ services:
     startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --workers 2 --threads 4 --timeout 120
     autoDeploy: true
     envVars:
-      - key: afd84cff68359e9558e735eec719a6b310c8444e418854fe17058fed9599ed96
+      - key: FLASK_SECRET_KEY
         generateValue: true
-      - key: https://srqtaildhnwmtxwuxfoe.supabase.co
-        sync: false
-      - key: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNycXRhaWxkaG53bXR4d3V4Zm9lIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MDU3MzYwNSwiZXhwIjoyMDk2MTQ5NjA1fQ.nsKJiFWf-SOdgYhMJ1KRjVWYRpxqhzA-ViZSJHdvTEk
+      - key: SUPABASE_URL
+        value: https://srqtaildhnwmtxwuxfoe.supabase.co
+      - key: SUPABASE_SERVICE_ROLE_KEY
         sync: false
       - key: SESSION_COOKIE_SECURE
         value: "true"
