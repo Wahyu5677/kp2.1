@@ -83,7 +83,10 @@ def internal_error(_e):
     app.logger.exception("Unhandled 500 error at %s %s", request.method, request.path)
     return render_template("errors/500.html"), 500
 
-
+@app.route("/health")
+def health():
+    return "ok", 200
+    
 # Import Routes
 from routes.auth_routes import *
 from routes.barang_routes import *
