@@ -1,3 +1,6 @@
+# Deprecated: konfigurasi Render ini dipertahankan sebagai arsip.
+# Deployment aktif telah dipindahkan ke Zeabur.
+# Lihat panduan: ZEABUR_DEPLOY.md
 services:
   - type: web
     name: nia-jaya-fotocopy
@@ -5,7 +8,7 @@ services:
     plan: free
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --workers 2 --threads 4 --timeout 120
-    autoDeploy: true
+    autoDeploy: false
     envVars:
       - key: FLASK_SECRET_KEY
         generateValue: true

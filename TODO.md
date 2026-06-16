@@ -1,8 +1,7 @@
-# Render Deploy Minimal Plan
+# TODO - Migrasi Deploy Render ke Zeabur
 
-- [x] Analyze current Flask app entrypoint and config
-- [x] Identify missing deploy files for Render
-- [x] Add `requirements.txt` (minimal dependencies only)
-- [x] Add `render.yaml` (build/start + env placeholders)
-- [x] Add `Procfile` (gunicorn command)
-- [x] Provide deployment checklist and env var mapping for Render
+- [x] Audit konfigurasi deploy yang ada (Render/Procfile/env vars)
+- [x] Buat panduan deploy Zeabur lengkap
+- [x] Tandai konfigurasi Render sebagai deprecated agar tidak membingungkan
+- [x] Tambahkan troubleshooting popup billing / deploy issue
+- [x] Final review instruksi yang bisa langsung dipakai

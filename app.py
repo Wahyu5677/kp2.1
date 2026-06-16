@@ -91,5 +91,11 @@ from routes.barang_kosong_routes import *
 from routes.keuangan_routes import *
 from routes.stock_opname_routes import *
 
+import os
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Server cloud akan menentukan port secara otomatis lewat environment variable
+    port = int(os.environ.get("PORT", 5000))
+    
+    # Jalankan dengan host 0.0.0.0 agar bisa diakses secara publik di server
+    app.run(host='0.0.0.0', port=port, debug=False)
