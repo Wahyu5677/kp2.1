@@ -17,4 +17,6 @@ ENV FLASK_ENV=production
 
 EXPOSE 8000
 
-CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:8000", "--workers", "2", "--threads", "4", "--timeout", "120"]
+# Use the PORT environment variable (provided by Vercel) if set.
+# Use sh -lc so ${PORT:-8000} is expanded.
+CMD ["sh", "-lc", "gunicorn app:app --bind 0.0.0.0:${PORT:-8000} --workers 2 --threads 4 --timeout 120"]
