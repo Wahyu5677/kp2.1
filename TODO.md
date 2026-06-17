@@ -1,7 +1,8 @@
-# TODO - Migrasi Deploy Render ke Zeabur
+TODO - Perbaikan Deploy Vercel + Cleanup SnapDeploy
 
-- [x] Audit konfigurasi deploy yang ada (Render/Procfile/env vars)
-- [x] Buat panduan deploy Zeabur lengkap
-- [x] Tandai konfigurasi Render sebagai deprecated agar tidak membingungkan
-- [x] Tambahkan troubleshooting popup billing / deploy issue
-- [x] Final review instruksi yang bisa langsung dipakai
+- [x] Audit konfigurasi deploy saat ini (vercel.json, Dockerfile, app.py, config.py)
+- [ ] Hapus file dokumentasi SnapDeploy yang tidak dibutuhkan
+- [ ] Rapikan konfigurasi Vercel agar error 500 lebih mudah ditracing
+- [ ] Commit perubahan ke git dan push ke GitHub
+- [ ] Trigger redeploy ke Vercel via CLI
+- [ ] Verifikasi endpoint /health dan halaman / setelah redeploy
