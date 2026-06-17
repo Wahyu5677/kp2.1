@@ -88,17 +88,33 @@ def internal_error(_e):
     app.logger.exception("Unhandled 500 error at %s %s", request.method, request.path)
     return render_template("errors/500.html"), 500
 
+ROUTES_LOAD_ERROR = None
+
+
+# Import Routes (safe-load for serverless startup resilience)
+try:
+    from routes.auth_routes import *
+    from routes.barang_routes import *
+    from routes.barang_kosong_routes import *
+    from routes.keuangan_routes import *
+    from routes.stock_opname_routes import *
+except Exception as route_import_error:
+    ROUTES_LOAD_ERROR = str(route_import_error)
+    app.logger.exception("Route import failed during startup: %s", route_import_error)
+
+
 @app.route("/health")
 def health():
-    return "ok", 200
-
-
-# Import Routes
-from routes.auth_routes import *
-from routes.barang_routes import *
-from routes.barang_kosong_routes import *
-from routes.keuangan_routes import *
-from routes.stock_opname_routes import *
+    if ROUTES_LOAD_ERROR:
+        return {
+            "status": "degraded",
+            "routes_loaded": False,
+            "error": ROUTES_LOAD_ERROR
+        }, 200
+    return {
+        "status": "ok",
+        "routes_loaded": True
+    }, 200
 
 import os
 

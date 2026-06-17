@@ -1,7 +1,8 @@
-# TODO - Vercel Critical-path Recovery
+# TODO Deploy Recovery (Vercel)
 
-- [ ] Replace vercel.json with modern functions config
-- [ ] Redeploy to Vercel production
-- [ ] Test GET /health
-- [ ] Test GET /
-- [ ] If still failing: capture logs and prepare clean re-init steps (GitHub + Vercel)
+- [x] Refactor `app.py` to safe-load route imports with try/except
+- [x] Add health status payload to indicate `ok` or `degraded`
+- [ ] Commit and push deploy fix
+- [ ] Redeploy Vercel production (`--force`)
+- [ ] Test `GET /health`
+- [ ] Test `GET /`
